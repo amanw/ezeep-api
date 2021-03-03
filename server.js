@@ -50,7 +50,7 @@ app.use(initilaizeSession());
 
 let tokenParams = {
     code: null,
-    redirect_uri: 'http://localhost:8080/callback',
+    redirect_uri: 'https://test-printer-api.herokuapp.com/callback',
     grant_type: 'authorization_code',
 }
 
@@ -77,7 +77,7 @@ app.get('/callback', async (req, res, next) => {
 app.get('/authorize', function (req, res) {
     console.log("authorization in process")
     const authorizationUri = client.authorizeURL({
-        redirect_uri: 'http://localhost:8080/callback',
+        redirect_uri: 'https://test-printer-api.herokuapp.com/callback',
     
     })
     res.redirect(authorizationUri);
@@ -114,7 +114,6 @@ app.get('/printers', async function(req, res){
 
 
 app.get('/refreshtoken', async function(req,res){
-    console.log('test', req.query.string)
     let accessTokenString = req.session.accessToken;
     console.log("checking the token", accessTokenString);
     if (!req.session.accessToken){
