@@ -1,0 +1,39 @@
+{
+  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FjY291bnQuZXplZXAuY29tIiwiZXhwIjoxNjE0ODAxMjk2LCJpYXQiOjE2MTQ3OTc2OTYsInNjb3BlcyI6IiIsInN1YiI6IjIzMzI4ZWJiLTk4ODktNDJkYi1hMjdlLTgxZDZiYTY0NWIxZiIsIm9yZyI6ImQ2YjUxNjA3LTJmNzQtNGQ4Yy05OWI0LWFhMGNjNGY0NTM1YiIsInJvbCI6ImFkbWluIn0.VoRvfwM4Gr1Pat_pJZVCj7I12shPRUU7-AevpwRqwqF0eB_MNNoBc2UDzkPQXrfIw5C0wxi4XqqonPEuCj_VYMi4f0z3ooKWn62EZmgXswVKGDZQL4unFgxb0dNop1cBpgclS60AVLS-V3G7U4Sc3LnqwQ8yW2J1g7BdXcyAZ7IegoFJwjNbAjLIPSQeDJ3Xv2IMNj0DMmVjUTnRTYtJ3-THsfHOaOmL4yYqKRPbetUKH-VsKBs4tcB4X0YId_N2oV73wZf596lQWRo-7o8qzTueBuxpKhShIt8g542CT1RfWh0h2T3fmAiynkeDcPotK1dIJVCIVAuECJfq19GbFA",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "scope": "",
+  "refresh_token": "ZtFUY7YkkYi5Wb3HB3Ik63yN6sSGyA5i",
+  "expires_at": "2021-03-03T19:54:56.509Z"
+}
+
+curl -X PUT \
+  'https://rndsvcezp.blob.core.windows.net/userstorage/ERI_264875be-6310-4fef-8a1a-dc66e653e38a?sv=2019-07-07&sr=b&sig=TlAyLsWjMIQ5dNcp3Bs9%2FWz8sKuSNl%2FaeUuHcb4nzlo%3D&se=2021-03-03T20%3A42%3A01Z&sp=wl' \
+  -H 'Accept: */*' \
+  -H 'Accept-Encoding: gzip, deflate' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Length: 211' \
+  -H 'Content-Type: multipart/form-data; boundary=--------------------------759498512080189801667215' \
+  -H 'Host: rndsvcezp.blob.core.windows.net' \
+  -H 'User-Agent: PostmanRuntime/7.15.2' \
+  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  -H 'x-ms-blob-type: BlockBlob' \
+  -F file='/home/aman/workspace/ezeep-api/uploads/test.png'
+
+curl -X POST \
+  https://printapi.ezeep.com/sfapi/Print/ \
+  -H 'Accept: */*' \
+  -H 'Accept-Encoding: gzip, deflate' \
+  -H 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FjY291bnQuZXplZXAuY29tIiwiZXhwIjoxNjE0ODAxMjk2LCJpYXQiOjE2MTQ3OTc2OTYsInNjb3BlcyI6IiIsInN1YiI6IjIzMzI4ZWJiLTk4ODktNDJkYi1hMjdlLTgxZDZiYTY0NWIxZiIsIm9yZyI6ImQ2YjUxNjA3LTJmNzQtNGQ4Yy05OWI0LWFhMGNjNGY0NTM1YiIsInJvbCI6ImFkbWluIn0.VoRvfwM4Gr1Pat_pJZVCj7I12shPRUU7-AevpwRqwqF0eB_MNNoBc2UDzkPQXrfIw5C0wxi4XqqonPEuCj_VYMi4f0z3ooKWn62EZmgXswVKGDZQL4unFgxb0dNop1cBpgclS60AVLS-V3G7U4Sc3LnqwQ8yW2J1g7BdXcyAZ7IegoFJwjNbAjLIPSQeDJ3Xv2IMNj0DMmVjUTnRTYtJ3-THsfHOaOmL4yYqKRPbetUKH-VsKBs4tcB4X0YId_N2oV73wZf596lQWRo-7o8qzTueBuxpKhShIt8g542CT1RfWh0h2T3fmAiynkeDcPotK1dIJVCIVAuECJfq19GbFA' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Length: 399' \
+  -H 'Content-Type: application/json' \
+  -H 'Host: printapi.ezeep.com' \
+  -H 'User-Agent: PostmanRuntime/7.15.2' \
+  -d '{
+	"fileid": "ERI_05e68b06-77a3-4913-b379-54522e97379f",
+	"printerid": "b2023ba0-086e-4d00-8615-e93542e29d91",
+	"type": "png",
+	"alias": "test.png",
+    "printanddelete": false
+}'

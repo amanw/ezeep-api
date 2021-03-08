@@ -1,12 +1,12 @@
-const { exception } = require('console');
 const express = require('express');
 const app = express();
-const fs = require("fs");
 const fetch = require('node-fetch');
 const session = require('express-session');
 const {v4: uuidv4} = require('uuid');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const fileUpload = require('express-fileupload');
+const cors = require('cors');
 
 
 // creds required for ezeep api
@@ -20,6 +20,8 @@ const credentials = {
         tokenHost: "https://account.ezeep.com",
     },
 };
+
+
 
 // oauth2 library to consume
 const { AuthorizationCode, ClientCredentials } = require('simple-oauth2');
@@ -40,11 +42,14 @@ initilaizeSession = () => {
     })
     return token_session;
 }
-
-app.use(bodyParser.json())
+app.use(fileUpload());
+app.use(cors());
+app.use(bodyParser.json());
 app.use(express.json());
+
 app.use(express.urlencoded({extended: true}));
 app.use(initilaizeSession());
+
 
 
 
@@ -161,11 +166,82 @@ app.post('/printerinfo', async function(req,res){
         const respJson = await response.json()      
         return res.status(200).json(respJson);
     } catch (error){
-        console.error('Error refreshing access Token', error);
-        res.status(500).json("Error occured in refreshing the token")
+        console.error('Error getting printer info', error);
+        res.status(500).json("Error occured getting the printer info.")
     }
     
 });
+
+
+app.get('/prepareupload', async function(req,res){
+    const token  = req.query.token
+    let configRequest = {
+        method: 'GET',
+        headers: {
+            Accept:'*/*',
+            Accept: 'Encoding: gzip, deflate',
+            Authorization: 'Bearer ' + token,
+        }
+    }
+    const url = "https://printapi.ezeep.com/sfapi/PrepareUpload";
+    console.log("The url looks like" + url);
+    try{
+         const response = await fetch(url, configRequest)
+         if (response.status === 401){
+            return res.status(401).json("The API is unauthorized, Please make sure you authorize it again");
+        }
+        const respJson = await response.json()      
+        return res.status(200).json(respJson);
+    } catch (error){
+        console.error('Error preparing the upload', error);
+        res.status(500).json("Error preparing the upload");
+    }
+    
+});
+
+app.post('/uploadfile', async function(req, res){
+    const {sasURI} = req.body;
+
+    console.log(sasURI);
+    let fileToPrint = req.files.doc;
+    console.log(fileToPrint);
+    const path = __dirname + '/uploads/'+ fileToPrint.name;
+    console.log(path)
+    fileToPrint.mv(path);
+    const configParams = {
+        method: 'PUT',
+        headers: {
+            Accept:'*/*',
+            Accept: 'Encoding: gzip, deflate',
+            "Content-Type":'multipart/form-data',
+            'x-ms-blob-type': 'BlockBlob'
+        },
+        file:path,
+    }
+    const url = sasURI;
+    console.log(url)
+    try{
+        const response = await fetch(url, configParams)
+        if (response.status === 401){
+           return res.status(401).json("The API is unauthorized, Please make sure you authorize it again");
+       }
+       const respJson = await response.json()      
+       return res.status(200).json(respJson);
+   } catch (error){
+       console.error('Error uploading the file', error);
+       res.status(500).json("Error uploading the file'");
+   }
+
+    // res.send({
+    //     status:true,
+    //     message: 'File is uploaded',
+    //     data: {
+    //         name: printFile.name,
+    //         mimetype: printFile.mimetype,
+    //         size: printFile.size
+    //     }
+    // })
+})
 
 app.use((err, req, res, next) => {
     res.locals.message = err.message;
